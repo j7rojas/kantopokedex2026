@@ -53,40 +53,51 @@ root/
 ### Data Flow Diagram
 ```mermaid
 graph LR
-    User([User Browser]) <--> React[React Frontend]
-    React <--> Express[Express Backend]
-    Express <--> Cache[(Local Cache)]
-    Express <--> PokeAPI[PokeAPI External]
+    User([User Browser]) <--> Express[Express Backend]
+    subgraph "Express Server (Single Host)"
+        Express <--> Client[React Frontend Static Files]
+        Express <--> API[API Routes]
+    end
+    API <--> Cache[(Local Cache)]
+    API <--> PokeAPI[PokeAPI External]
 ```
 
 ## Setup Instructions
 
-### 1. Backend Setup
-Open a terminal in the `server` directory:
+### 1. Unified Setup (Recommended)
+You can now build and start the entire project from the root folder:
 ```bash
-cd server
-npm install
-npm run dev
+npm install && npm start
 ```
-The backend will start on [http://localhost:3001](http://localhost:3001).
+This command will:
+1. Install dependencies for both frontend and backend.
+2. Build the React frontend into `client/dist`.
+3. Compile the TypeScript backend into `server/dist`.
+4. Start the Express server, which will serve both the API and the frontend.
 
-### 2. Frontend Setup
-Open a new terminal in the `client` directory:
+### 2. Manual Setup (For Development)
+If you want to run the project with "Hot Module Replacement" for the frontend:
+
+**Backend**:
 ```bash
-cd client
-npm install
-npm run dev
+cd server && npm install && npm run dev
 ```
-The frontend will start on [http://localhost:3000](http://localhost:3000).
 
-### 3. Root Orchestration (Deployment)
-The project includes a root-level `package.json` to handle deployment on platforms like **Koyeb**.
+**Frontend**:
+```bash
+cd client && npm install && npm run dev
+```
+
+---
+
+## Root Orchestration (Deployment)
+The project is optimized for single-host deployment on platforms like **Koyeb**.
 
 When you run `npm start` from the root:
 1. It triggers `npm run build` (Installs and builds both `client` and `server`).
 2. Once the build finishes, it starts the production server from the `server` directory.
 
-This ensures the `dist/` folder is always generated before the server starts, preventing "Module Not Found" errors.
+The Express server in `server/src/app.ts` is configured to serve the static files generated in `client/dist`. This means you only need to deploy the backend, and it will serve your frontend automatically.
 
 ---
 
@@ -94,10 +105,12 @@ This ensures the `dist/` folder is always generated before the server starts, pr
 - **Platform**: Koyeb (or similar)
 - **Build Command**: `npm run build`
 - **Start Command**: `npm start`
+- **URL**: Your application will be available at the root URL (`/`).
 
 ---
 
 ## Technical Details & Troubleshooting
+- **Single-Host Deployment**: Express serves the React `index.html` for all non-API routes, allowing client-side routing to work.
 - **Move Filtering**: Moves are filtered for the `firered-leafgreen` version group using level-up methods.
 - **TypeScript**: Consistent typing between frontend and backend. Note: Imports in `client/src/main.tsx` must not use `.tsx` extensions to avoid build errors.
 - **Caching**: The backend uses `node-cache` with a 1-hour TTL.
@@ -106,16 +119,18 @@ This ensures the `dist/` folder is always generated before the server starts, pr
 ---
 
 ## How it Works
-1. **Frontend** requests Pokémon data from our **Backend**.
-2. **Backend** checks its **Local Cache**.
-3. If not in cache, **Backend** fetches raw data from **PokeAPI**.
-4. **Backend** transforms the data:
+1. **User** visits the root URL of the website.
+2. **Express Backend** serves the React frontend static files from `client/dist`.
+3. **Frontend** requests Pokémon data from our **Backend**'s `/api/pokemon` endpoints.
+4. **Backend** checks its **Local Cache**.
+5. If not in cache, **Backend** fetches raw data from **PokeAPI**.
+6. **Backend** transforms the data:
    - Formats names and images.
    - Maps base stats.
    - Filters moves specifically for the `firered-leafgreen` version group.
    - Sorts moves by level.
-5. **Backend** returns clean, optimized JSON to the **Frontend**.
-6. **Frontend** renders the data into responsive cards using **Tailwind CSS** and **Chart.js**.
+7. **Backend** returns clean, optimized JSON to the **Frontend**.
+8. **Frontend** renders the data into responsive cards using **Tailwind CSS** and **Chart.js**.
 
 ## Notes for Beginners
 - Every file is thoroughly commented to explain its purpose.
