@@ -17,6 +17,7 @@ A full-stack Pokédex application featuring the original 151 Pokémon.
 
 ```text
 root/
+├── package.json                # Root orchestration script (for deployment)
 ├── client/                     # Frontend React application
 │   ├── src/
 │   │   ├── components/         # Reusable UI components
@@ -77,6 +78,13 @@ npm install
 npm run dev
 ```
 The frontend will start on [http://localhost:3000](http://localhost:3000).
+
+### 3. Root Orchestration (Deployment)
+If you are deploying to a platform like **Koyeb**, the project is configured to build and start from the root directory:
+- **Build**: `npm run build` (Installs and builds both `client` and `server`)
+- **Start**: `npm start` (Runs the production server)
+
+---
 
 ## How it Works
 1. **Frontend** requests Pokémon data from our **Backend**.
