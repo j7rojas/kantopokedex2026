@@ -66,7 +66,7 @@ export async function getPokemonById(idOrName: string | number): Promise<Pokemon
         const detail = moveEntry.version_group_details.find(v => v.version_group.name === 'firered-leafgreen' && v.move_learn_method.name === 'level-up')!;
         
         // We need an extra call to get the move's type since it's not in the main pokemon response
-        const moveData = await getMoveDetails(moveEntry.move.url);
+        const moveData: PokeAPIMoveResponse = await getMoveDetails(moveEntry.move.url);
         
         return {
           name: moveEntry.move.name.replace('-', ' '),

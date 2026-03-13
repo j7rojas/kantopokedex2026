@@ -80,9 +80,28 @@ npm run dev
 The frontend will start on [http://localhost:3000](http://localhost:3000).
 
 ### 3. Root Orchestration (Deployment)
-If you are deploying to a platform like **Koyeb**, the project is configured to build and start from the root directory:
-- **Build**: `npm run build` (Installs and builds both `client` and `server`)
-- **Start**: `npm start` (Runs the production server)
+The project includes a root-level `package.json` to handle deployment on platforms like **Koyeb**.
+
+When you run `npm start` from the root:
+1. It triggers `npm run build` (Installs and builds both `client` and `server`).
+2. Once the build finishes, it starts the production server from the `server` directory.
+
+This ensures the `dist/` folder is always generated before the server starts, preventing "Module Not Found" errors.
+
+---
+
+## Deployment Summary
+- **Platform**: Koyeb (or similar)
+- **Build Command**: `npm run build`
+- **Start Command**: `npm start`
+
+---
+
+## Technical Details & Troubleshooting
+- **Move Filtering**: Moves are filtered for the `firered-leafgreen` version group using level-up methods.
+- **TypeScript**: Consistent typing between frontend and backend. Note: Imports in `client/src/main.tsx` must not use `.tsx` extensions to avoid build errors.
+- **Caching**: The backend uses `node-cache` with a 1-hour TTL.
+- **Ports**: The server dynamically listens on `process.env.PORT` with a fallback to `3001` for local development.
 
 ---
 
