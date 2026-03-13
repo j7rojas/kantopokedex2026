@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #f3f4f6;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  min-width: 320px;
+  min-height: 100vh;
+  color: #1f2937;
+}
+
+#root {
+  width: 100%;
+}
+
+/* Pokemon Type Colors */
+.bg-type-grass { background-color: #78C850; }
+.bg-type-poison { background-color: #A040A0; }
+.bg-type-fire { background-color: #F08030; }
+.bg-type-flying { background-color: #A890F0; }
+.bg-type-water { background-color: #6890F0; }
+.bg-type-bug { background-color: #A8B820; }
+.bg-type-normal { background-color: #A8A878; }
+.bg-type-electric { background-color: #F8D030; }
+.bg-type-ground { background-color: #E0C068; }
+.bg-type-fairy { background-color: #EE99AC; }
+.bg-type-fighting { background-color: #C03028; }
+.bg-type-psychic { background-color: #F85888; }
+.bg-type-rock { background-color: #B8A038; }
+.bg-type-steel { background-color: #B8B8D0; }
+.bg-type-ice { background-color: #98D8D8; }
+.bg-type-ghost { background-color: #705898; }
+.bg-type-dragon { background-color: #7038F8; }
+.bg-type-dark { background-color: #705848; }
