@@ -110,6 +110,7 @@ The Express server in `server/src/app.ts` is configured to serve the static file
 ---
 
 ## Technical Details & Troubleshooting
+- **API Routes**: The frontend uses a relative base URL (`/api`) to communicate with the backend, ensuring compatibility across all hosting environments.
 - **Single-Host Deployment**: Express serves the React `index.html` for all non-API routes, allowing client-side routing to work.
 - **Move Filtering**: Moves are filtered for the `firered-leafgreen` version group using level-up methods.
 - **TypeScript**: Consistent typing between frontend and backend. Note: Imports in `client/src/main.tsx` must not use `.tsx` extensions to avoid build errors.

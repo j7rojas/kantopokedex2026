@@ -9,7 +9,9 @@ import axios from 'axios';
 import { Pokemon } from '../types/pokemon';
 
 // The URL where our Node.js backend is running
-const API_BASE_URL = 'http://localhost:3001/api';
+// We use a relative path '/api' so it works both locally and in production
+// (since the backend serves the frontend from the same host)
+const API_BASE_URL = '/api';
 
 /**
  * Fetch all 151 Kanto Pokemon from our backend
