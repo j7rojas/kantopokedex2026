@@ -21,6 +21,13 @@ export interface PokemonMove {
   type: string;
 }
 
+export interface EvolutionStage {
+  id: number;
+  name: string;
+  sprite: string;
+  triggerText: string | null;
+}
+
 export interface Pokemon {
   id: number;
   name: string;
@@ -28,6 +35,7 @@ export interface Pokemon {
   types: string[];
   stats: PokemonStats;
   moves: PokemonMove[];
+  evolutionChain: EvolutionStage[];
 }
 
 // Internal structure for raw PokeAPI responses (only the parts we need)
@@ -75,4 +83,46 @@ export interface PokeAPIMoveResponse {
   type: {
     name: string;
   };
+}
+
+// PokeAPI Species structure
+export interface PokeAPISpeciesResponse {
+  evolution_chain: {
+    url: string;
+  };
+}
+
+// PokeAPI Evolution Chain structure
+export interface EvolutionDetail {
+  min_level?: number;
+  item?: { name: string };
+  trigger: { name: string };
+  held_item?: { name: string };
+  location?: { name: string };
+  known_move?: { name: string };
+  known_move_type?: { name: string };
+  min_happiness?: number;
+  min_beauty?: number;
+  min_affection?: number;
+  needs_overworld_rain?: boolean;
+  party_species?: { name: string };
+  party_type?: { name: string };
+  relative_physical_stats?: number;
+  time_of_day?: string;
+  trade_species?: { name: string };
+  turn_upside_down?: boolean;
+}
+
+export interface ChainLink {
+  is_baby: boolean;
+  species: {
+    name: string;
+    url: string;
+  };
+  evolution_details: EvolutionDetail[];
+  evolves_to: ChainLink[];
+}
+
+export interface PokeAPIEvolutionChainResponse {
+  chain: ChainLink;
 }

@@ -20,6 +20,13 @@ export interface PokemonMove {
   type: string;
 }
 
+export interface EvolutionStage {
+  id: number;
+  name: string;
+  sprite: string;
+  triggerText: string | null;
+}
+
 export interface Pokemon {
   id: number;
   name: string;
@@ -27,4 +34,5 @@ export interface Pokemon {
   types: string[];
   stats: PokemonStats;
   moves: PokemonMove[];
+  evolutionChain: EvolutionStage[];
 }

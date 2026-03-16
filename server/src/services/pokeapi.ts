@@ -15,7 +15,12 @@ import {
   Pokemon, 
   PokeAPIPokemonResponse, 
   PokeAPIMoveResponse, 
-  PokemonMove 
+  PokemonMove,
+  PokeAPISpeciesResponse,
+  PokeAPIEvolutionChainResponse,
+  ChainLink,
+  EvolutionStage,
+  EvolutionDetail
 } from '../types/pokemon';
 
 // Initialize a cache that expires every 1 hour (3600 seconds)
@@ -77,13 +82,25 @@ export async function getPokemonById(idOrName: string | number): Promise<Pokemon
 
     const moves = (await Promise.all(movesPromises)).sort((a, b) => a.level - b.level);
 
+    // 4. Fetch Evolution Chain
+    // First, get the species data to find the evolution chain URL
+    const speciesResponse = await axios.get<PokeAPISpeciesResponse>(`${BASE_URL}/pokemon-species/${id}`);
+    const evolutionChainUrl = speciesResponse.data.evolution_chain.url;
+
+    // Fetch the actual evolution chain
+    const evolutionChainResponse = await axios.get<PokeAPIEvolutionChainResponse>(evolutionChainUrl);
+    
+    // Parse the evolution chain into a flat array of stages
+    const evolutionChain = await parseEvolutionChain(evolutionChainResponse.data.chain);
+
     const transformedPokemon: Pokemon = {
       id,
       name,
       image,
       types,
       stats,
-      moves
+      moves,
+      evolutionChain
     };
 
     // Save to cache
@@ -105,6 +122,56 @@ async function getMoveDetails(url: string): Promise<PokeAPIMoveResponse> {
   const response = await axios.get<PokeAPIMoveResponse>(url);
   cache.set(url, response.data);
   return response.data;
+}
+
+/**
+ * Helper to parse the nested PokeAPI evolution chain structure into a clean flat array.
+ */
+async function parseEvolutionChain(chain: ChainLink): Promise<EvolutionStage[]> {
+  const result: EvolutionStage[] = [];
+  let current: ChainLink | undefined = chain;
+
+  while (current) {
+    const speciesName = current.species.name;
+    const speciesId = parseInt(current.species.url.split('/').filter(Boolean).pop() || '0');
+    
+    // Format trigger text from evolution details
+    let triggerText: string | null = null;
+    if (current.evolution_details && current.evolution_details.length > 0) {
+      const detail = current.evolution_details[0];
+      triggerText = formatEvolutionTrigger(detail);
+    }
+
+    // Get the Gen III FireRed/LeafGreen front sprite
+    // Fallback if not available
+    const sprite = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iii/firered-leafgreen/${speciesId}.png`;
+    
+    result.push({
+      id: speciesId,
+      name: speciesName.charAt(0).toUpperCase() + speciesName.slice(1),
+      sprite,
+      triggerText
+    });
+
+    // For now, we follow the first evolution path for simplicity in the UI,
+    // but the structure can be extended for branching.
+    current = current.evolves_to[0];
+  }
+
+  return result;
+}
+
+/**
+ * Formats the evolution trigger into a human-readable string.
+ */
+function formatEvolutionTrigger(detail: EvolutionDetail): string {
+  if (detail.min_level) return `Lv. ${detail.min_level}`;
+  if (detail.item) return detail.item.name.replace('-', ' ');
+  if (detail.trigger.name === 'trade') return 'Trade';
+  if (detail.trigger.name === 'level-up' && detail.min_happiness) return 'Friendship';
+  
+  // Fallback for other triggers
+  return detail.trigger.name.replace('-', ' ');
 }
 
 /**

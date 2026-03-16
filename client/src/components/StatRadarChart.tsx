@@ -35,7 +35,7 @@ interface StatRadarChartProps {
 const StatRadarChart: React.FC<StatRadarChartProps> = ({ stats, pokemonName }) => {
   // Map our internal stat names to the display labels requested
   const data = {
-    labels: ['HP', 'Attack', 'Defense', 'Sp. Atk', 'Sp. Def', 'Speed'],
+    labels: ['HP', 'Atk', 'Def', 'Sp.A', 'Sp.D', 'Spd'],
     datasets: [
       {
         label: `${pokemonName} Stats`,
@@ -77,7 +77,7 @@ const StatRadarChart: React.FC<StatRadarChartProps> = ({ stats, pokemonName }) =
   };
 
   return (
-    <div className="h-64 w-full">
+    <div className="h-40 w-full">
       <Radar data={data} options={options} />
     </div>
   );
