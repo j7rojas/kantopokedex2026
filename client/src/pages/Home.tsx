@@ -54,7 +54,11 @@ const Home: React.FC = () => {
   // Unique list of types for the filter dropdown
   const allTypes = useMemo(() => {
     const types = new Set<string>();
-    pokemons.forEach(p => p.types.forEach(t => types.add(t)));
+    pokemons.forEach(p => p.types.forEach(t => {
+      // The backend already filters out 'fairy' from Pokemon types.
+      // But we double-check here to ensure it is not in the filter dropdown.
+      if (t !== 'fairy') types.add(t);
+    }));
     return Array.from(types).sort();
   }, [pokemons]);
 

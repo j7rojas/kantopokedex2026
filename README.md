@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-v0.3.0-blue)
+![Version](https://img.shields.io/badge/version-v0.3.5-blue)
 ![Node.js](https://img.shields.io/badge/node-%3E%3D18-green)
 ![React](https://img.shields.io/badge/react-18-blue)
 ![API](https://img.shields.io/badge/data-PokeAPI-yellow)

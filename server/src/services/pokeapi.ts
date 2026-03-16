@@ -50,7 +50,7 @@ export async function getPokemonById(idOrName: string | number): Promise<Pokemon
     const id = data.id;
     const name = data.name.charAt(0).toUpperCase() + data.name.slice(1);
     const image = data.sprites.other?.['official-artwork']?.front_default || data.sprites.front_default;
-    const types = data.types.map(t => t.type.name);
+    const types = getGenerationThreeTypes(data);
 
     // 2. Map stats
     const stats = {
@@ -172,6 +172,33 @@ function formatEvolutionTrigger(detail: EvolutionDetail): string {
   
   // Fallback for other triggers
   return detail.trigger.name.replace('-', ' ');
+}
+
+/**
+ * Determines the correct Generation III typing for a Pokémon.
+ * Historical typings (like Clefable being Normal instead of Fairy) are handled via past_types.
+ */
+function getGenerationThreeTypes(data: PokeAPIPokemonResponse): string[] {
+  // Simplified Rule:
+  // 1. If the Pokemon's modern types include 'fairy', use its historical 'past_types'
+  // 2. Otherwise, use its current top-level types
+  // 3. Always filter out 'fairy' just in case (as it did not exist in Gen III)
+
+  const hasFairyType = data.types.some(t => t.type.name === 'fairy');
+  
+  if (hasFairyType && data.past_types.length > 0) {
+    // If it's a Fairy type today, use the first available past typing entry
+    // (In Gen III, all current Fairy types in Kanto were either Normal or Psychic)
+    return data.past_types[0].types
+      .map(t => t.type.name)
+      .filter(name => name !== 'fairy');
+  }
+
+  // Use the standard top-level types for all other Pokemon
+  // (e.g., Magnemite correctly keeps its Electric/Steel typing)
+  return data.types
+    .map(t => t.type.name)
+    .filter(name => name !== 'fairy');
 }
 
 /**

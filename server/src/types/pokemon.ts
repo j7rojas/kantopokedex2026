@@ -51,9 +51,22 @@ export interface PokeAPIPokemonResponse {
     front_default: string;
   };
   types: Array<{
+    slot: number;
     type: {
       name: string;
     };
+  }>;
+  past_types: Array<{
+    generation: {
+      name: string;
+      url: string;
+    };
+    types: Array<{
+      slot: number;
+      type: {
+        name: string;
+      };
+    }>;
   }>;
   stats: Array<{
     base_stat: number;

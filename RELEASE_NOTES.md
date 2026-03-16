@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.3.5 - 2026-03-16
+- Data: Corrected Pokémon typings to match Generation III (FireRed / LeafGreen) rules.
+- Data: Implemented a targeted historical typing fallback for Pokémon affected by modern Fairy typing.
+- UI: Removed the Fairy type from filters because it does not exist in Generation III.
+
 ## v0.3.0 - 2026-03-16
 - Feature: Added Evolutionary Chain section to Pokémon cards.
 - Data: Implemented backend evolution data fetching using species and evolution chain endpoints.
