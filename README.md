@@ -1,6 +1,26 @@
-# Kanto Pokédex 2026
+![Version](https://img.shields.io/badge/version-v0.3.0-blue)
+![Node.js](https://img.shields.io/badge/node-%3E%3D18-green)
+![React](https://img.shields.io/badge/react-18-blue)
+![API](https://img.shields.io/badge/data-PokeAPI-yellow)
+![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
-A full-stack Pokédex application featuring the original 151 Pokémon.
+# Kanto Pokédex 2026 - Pokemon Leafgreen / FireRed
+
+A full-stack Pokédex application featuring the original 151 Pokémon, specifically designed with **FireRed / LeafGreen (Generation III)** sprites, visuals, and mechanics.
+
+## Application Preview
+
+### Pokémon Card
+![pokemoncard.png](docs/images/pokemoncard.png)
+
+### Evolution Chain
+![evolution_chain.png](docs/images/evolution_chain.png)
+
+### Base Stats Chart
+![base_stats.png](docs/images/base_stats.png)
+
+### Moves Table
+![moves_table.png](docs/images/moves_table.png)
 
 ## Features
 - **Frontend**: React, Vite, TypeScript, Tailwind CSS, Chart.js.
@@ -10,6 +30,37 @@ A full-stack Pokédex application featuring the original 151 Pokémon.
 - **Card Design**: Compact cards with fixed headers and internal scrolling for move lists.
 - **Grid Geometry**: Multi-column grid optimized for viewing one row per viewport cleanly.
 - **Performance**: Backend caching with `node-cache` (1-hour TTL).
+
+## Architecture Overview
+
+The backend acts as an aggregator, fetching and transforming data from multiple PokeAPI endpoints to provide a clean, optimized JSON response to the frontend.
+
+```mermaid
+flowchart TD
+
+User["User"]
+
+Frontend["Browser (UI - React + Vite)"]
+
+Backend["Node.js / Express API"]
+
+PokeAPI["PokeAPI"]
+
+Pokemon["/pokemon endpoint"]
+Species["/pokemon-species endpoint"]
+Evolution["/evolution-chain endpoint"]
+
+User --> Frontend
+Frontend --> Backend
+
+Backend --> Pokemon
+Backend --> Species
+Backend --> Evolution
+
+Pokemon --> PokeAPI
+Species --> PokeAPI
+Evolution --> PokeAPI
+```
 
 ## Prerequisites
 - [Node.js](https://nodejs.org/) (v18 or higher recommended)

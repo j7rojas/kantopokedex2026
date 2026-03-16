@@ -25,7 +25,7 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
       </div>
 
       {/* Scrollable Content Wrapper */}
-      <div className="flex-1 flex flex-col min-h-0">
+      <div className="flex-1 flex flex-col min-h-0 gap-2">
         {/* Pokemon Image */}
         <div className="flex justify-center p-1 bg-gradient-to-b from-white to-gray-50 shrink-0">
           <img 

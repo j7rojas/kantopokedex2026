@@ -23,7 +23,7 @@ const EvolutionChain: React.FC<EvolutionChainProps> = ({ chain }) => {
   }
 
   return (
-    <div className="flex flex-wrap justify-center items-center gap-1">
+    <div className="flex flex-wrap justify-center items-center gap-1 mt-2">
       {chain.map((stage, index) => (
         <React.Fragment key={stage.id}>
           {/* Transition Arrow and Trigger */}
@@ -40,7 +40,7 @@ const EvolutionChain: React.FC<EvolutionChainProps> = ({ chain }) => {
 
           {/* Pokemon Sprite and Name */}
           <div className="flex flex-col items-center">
-            <div className="w-12 h-12 bg-gray-50 rounded-lg border border-gray-100 flex items-center justify-center p-0.5 shadow-sm">
+            <div className="w-12 h-12 bg-white rounded-lg border border-gray-100 flex items-center justify-center p-0.5 shadow-sm">
               <img
                 src={stage.sprite}
                 alt={stage.name}
@@ -52,7 +52,7 @@ const EvolutionChain: React.FC<EvolutionChainProps> = ({ chain }) => {
                 }}
               />
             </div>
-            <span className="text-[8px] mt-0.5 font-semibold text-gray-500 capitalize leading-none text-center max-w-[48px] truncate">
+            <span className="text-[8px] mt-1 font-semibold text-gray-500 capitalize leading-none text-center max-w-[48px] truncate">
               {stage.name}
             </span>
           </div>
